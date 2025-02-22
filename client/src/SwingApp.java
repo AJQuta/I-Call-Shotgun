@@ -5,6 +5,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
+import javax.imageio.*;
+import java.io.*;
+import javax.swing.ImageIcon;
 
 
 
@@ -14,14 +17,27 @@ public class SwingApp extends JFrame implements ActionListener {
     JButton call_shotgun;
     JButton tester;
     public SwingApp () {
+
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
         exit_button = new JButton("Exit");
-        call_shotgun = new JButton("Shotgun");
+        call_shotgun = new JButton("");
         tester = new JButton("test");
 
-        JFrame frame = new JFrame();
 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setLayout(new FlowLayout());
+        JFrame frame = new JFrame();
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setSize(screenWidth, screenHeight);
+
+        ImageIcon imageIcon = new ImageIcon("./src/shotgun.png");
+        Image image = imageIcon.getImage();
+        imageIcon = new ImageIcon(image.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH));
+        frame.setContentPane(new JLabel(imageIcon));
+
+        frame.setLayout(null);
         frame.setUndecorated(true);
 
 
@@ -32,6 +48,16 @@ public class SwingApp extends JFrame implements ActionListener {
         frame.add(exit_button);
         frame.add(call_shotgun);
         frame.add(tester);
+
+
+        call_shotgun.setOpaque(true);
+        call_shotgun.setBounds((screenWidth*10)/90, (screenHeight*10)/25, screenWidth/5, screenHeight/30);
+        call_shotgun.setForeground(Color.getColor("#787569"));
+        call_shotgun.setBackground(Color.getColor("#787569"));
+        //call_shotgun.setBackground(Color.BLACK);
+
+
+        exit_button.setBounds(screenWidth - screenWidth/10, screenHeight - screenHeight/7, screenWidth/20, screenHeight/30);
 
         frame.setVisible(true);
 
@@ -45,7 +71,7 @@ public class SwingApp extends JFrame implements ActionListener {
             try {
 
                 String message = "Shotgun|MichaelL11";
-                URL server_port = new URL("http://localhost:4444/");
+                URL server_port = new URL("https://localhost:4444/");
                 HttpsURLConnection connection =  (HttpsURLConnection) server_port.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "text/plain");
