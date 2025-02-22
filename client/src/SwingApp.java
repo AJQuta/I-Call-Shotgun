@@ -2,13 +2,10 @@ import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.OutputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
 import javax.imageio.*;
 import java.io.*;
-import javax.swing.ImageIcon;
 import java.net.*;
 
 
@@ -20,8 +17,10 @@ public class SwingApp extends JFrame implements ActionListener {
     JButton tester;
     Socket socket;
     String username;
-    public SwingApp () {
+    String futureMessage;
+    public SwingApp() {
         try {
+            
             username = JOptionPane.showInputDialog(null, "Enter your name:", "Input", JOptionPane.QUESTION_MESSAGE);
 
             String message = "BOOTSTRAP|" + username;
@@ -38,6 +37,8 @@ public class SwingApp extends JFrame implements ActionListener {
             socket = new Socket("localhost", newPort);
             bf = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             System.out.println(bf.readLine());
+            Thread async = new Thread(epicReader());
+            async.start();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -90,6 +91,18 @@ public class SwingApp extends JFrame implements ActionListener {
 
         frame.setVisible(true);
 
+    }
+
+    public String epicReader() {
+        BufferedReader shotgunReader;
+        try {
+            shotgunReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            futureMessage = shotgunReader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        System.out.println(futureMessage);
+        return futureMessage;
     }
 
 
