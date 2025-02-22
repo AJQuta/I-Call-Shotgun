@@ -75,7 +75,7 @@ public class Server {
     }
 
     private int create_request_handler(Request req) {
-        int new_port = 4000;
+        int new_port = 5000;
         if (!socket_threads.isEmpty()) {
             new_port = socket_threads.getLast().thr_port + 1;
         }
@@ -106,17 +106,20 @@ public class Server {
 
     public static void main(String[] args) {
         Server s = new Server();
+        SwingAppServer GUI = new SwingAppServer();
 
         Request req;
         while (true) {
             try {
                 s.sock = s.servSock.accept();
+                GUI.updateStats("Data");
                 BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream(), StandardCharsets.UTF_8));
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(s.sock.getOutputStream(), StandardCharsets.UTF_8), true);
                 req = new Request(bf.readLine());
                 s.request_post_office(req, bf, pw);
                 bf.close();
                 pw.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
