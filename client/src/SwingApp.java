@@ -17,12 +17,13 @@ public class SwingApp extends JFrame implements ActionListener {
     JButton exit_button;
     JButton call_shotgun;
     JButton tester;
+    Socket socket;
+    String username;
     public SwingApp () {
-
-        Socket socket;
         try {
+            username = JOptionPane.showInputDialog(null, "Enter your name:", "Input", JOptionPane.QUESTION_MESSAGE);
 
-            String message = "BOOTSTRAP|MichaelL11";
+            String message = "BOOTSTRAP|" + username;
 
             Socket preSocket = new Socket("localhost", 3444);
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(preSocket.getOutputStream(), StandardCharsets.UTF_8), true);
@@ -95,6 +96,17 @@ public class SwingApp extends JFrame implements ActionListener {
         if (e.getSource() == exit_button) {
             System.exit(1);
         } else if (e.getSource() == call_shotgun) {
+            try {
+
+                String message = "SHOTGUN|" + username;
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+                pw.println(message);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.exit(1);
+            }
+
 
         } else if (e.getSource() == tester) {
             System.out.println("tester works");
