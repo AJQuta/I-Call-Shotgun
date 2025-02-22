@@ -2,6 +2,7 @@ import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
@@ -101,7 +102,6 @@ public class SwingApp extends JFrame implements ActionListener {
                 String message = "SHOTGUN|" + username;
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println(message);
-
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.exit(1);
