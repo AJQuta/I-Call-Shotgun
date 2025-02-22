@@ -2,7 +2,6 @@ import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
@@ -83,9 +82,11 @@ public class SwingApp extends JFrame implements ActionListener {
                 BufferedReader bf = new BufferedReader(new InputStreamReader(preSocket.getInputStream(), StandardCharsets.UTF_8));
                 int newPort = Integer.parseInt(bf.readLine());
                 System.out.println("MyPort" + newPort);
+                bf.close();
 
                 Socket socket = new Socket("localhost", newPort);
-
+                bf = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+                System.out.println(bf.readLine());
 
 
                 /*URL server_port = new URL("https://localhost:4444/");
