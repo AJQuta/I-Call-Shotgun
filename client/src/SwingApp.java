@@ -8,6 +8,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.imageio.*;
 import java.io.*;
 import javax.swing.ImageIcon;
+import java.net.*;
 
 
 
@@ -73,7 +74,13 @@ public class SwingApp extends JFrame implements ActionListener {
             try {
 
                 String message = "Shotgun|MichaelL11";
-                URL server_port = new URL("https://localhost:4444/");
+
+                Socket socket = new Socket("localhost", 4444);
+                PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+                pw.println(message);
+
+
+                /*URL server_port = new URL("https://localhost:4444/");
                 HttpsURLConnection connection =  (HttpsURLConnection) server_port.openConnection();
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
@@ -82,7 +89,10 @@ public class SwingApp extends JFrame implements ActionListener {
                 byte[] raw_message = message.getBytes(StandardCharsets.UTF_8);
                 os.write(raw_message, 0, raw_message.length);
 
-                connection.disconnect();
+                connection.disconnect();*/
+
+
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.exit(1);
