@@ -1,3 +1,4 @@
+import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -73,11 +74,18 @@ public class SwingApp extends JFrame implements ActionListener {
         } else if (e.getSource() == call_shotgun) {
             try {
 
-                String message = "Shotgun|MichaelL11";
+                String message = "BOOTSTRAP|MichaelL11";
 
-                Socket socket = new Socket("localhost", 4444);
-                PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+                Socket preSocket = new Socket("localhost", 4444);
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(preSocket.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println(message);
+
+                BufferedReader bf = new BufferedReader(new InputStreamReader(preSocket.getInputStream(), StandardCharsets.UTF_8));
+                int newPort = Integer.parseInt(bf.readLine());
+                System.out.println("MyPort" + newPort);
+
+                Socket socket = new Socket("localhost", newPort);
+
 
 
                 /*URL server_port = new URL("https://localhost:4444/");
