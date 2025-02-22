@@ -75,6 +75,7 @@ public class SwingApp extends JFrame implements ActionListener {
                 String message = "Shotgun|MichaelL11";
                 URL server_port = new URL("https://localhost:4444/");
                 HttpsURLConnection connection =  (HttpsURLConnection) server_port.openConnection();
+                connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "text/plain");
                 OutputStream os = connection.getOutputStream();
