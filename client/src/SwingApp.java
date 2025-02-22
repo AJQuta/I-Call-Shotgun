@@ -131,19 +131,6 @@ public class SwingApp extends JFrame implements ActionListener {
         return futureMessage;
     }
 
-
-
-    public String epicReader() {
-        BufferedReader shotgunReader;
-        try {
-            shotgunReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-            futureMessage = shotgunReader.readLine();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return futureMessage;
-    }
-
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exit_button) {
             System.exit(1);
