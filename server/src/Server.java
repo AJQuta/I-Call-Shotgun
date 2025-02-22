@@ -167,10 +167,15 @@ public class Server {
                 pw.println(Request.SERV_RESPONSE.SUCCESS);
                 bf.close();
                 pw.close();
-                for (int i = 0; i < s.socket_threads.size(); i++) {
-                    if()
+                int port = -1;
+                for (Serv_Thread thread : s.socket_threads) {
+                    System.out.println("looping");
+                    if (thread.forUser(req.getData())) {
+                        port = thread.thr_serv.getLocalPort();
+                        break;
+                    }
                 }
-                String connectionInfo = "User: " + req.getData() + ", Port: " + s.socket_threads;
+                String connectionInfo = "User: " + req.getData() + ", Port: " + port;
                 s.userInfoArr.add(connectionInfo);
                 s.userCount++;
                 String users = "";
