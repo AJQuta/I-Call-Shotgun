@@ -76,7 +76,7 @@ public class SwingApp extends JFrame implements ActionListener {
 
                 String message = "BOOTSTRAP|MichaelL11";
 
-                Socket preSocket = new Socket("localhost", 4444);
+                Socket preSocket = new Socket("localhost", 3444);
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(preSocket.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println(message);
 

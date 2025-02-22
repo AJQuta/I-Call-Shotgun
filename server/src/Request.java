@@ -3,6 +3,7 @@ import java.io.IOException;
 public class Request {
 
     public static enum REQ_TYPE {
+        BOOTSTRAP,
         POST,
         GET,
         SHOTGUN
@@ -31,21 +32,23 @@ public class Request {
     }
 
     public Request(String req_data) throws IOException {
-        data = req_data;
-        String[] fields = data.split("\\|");
+        String[] fields = req_data.split("\\|");
         type = castToREQType(fields[0]);
         if (type == null) {
             throw new InvalidRequestException("Invalid type");
         }
-        data = "";
+        this.data = "";
+        
         for (int i = 1; i < fields.length; i++) {
-            data.concat(fields[i] + " ");
+            this.data += fields[i] + " ";
         }
-        data.trim();
+        this.data = this.data.trim();
     }
 
     private REQ_TYPE castToREQType(String t) {
         switch(t) {
+            case "BOOTSTRAP":
+                return REQ_TYPE.BOOTSTRAP;
             case "POST":
                 return REQ_TYPE.POST;
             case "GET":
