@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.io.BufferedReader;
@@ -75,7 +74,7 @@ public class Server {
     }
 
     private int create_request_handler(Request req) {
-        int new_port = 5000;
+        int new_port = 4000;
         if (!socket_threads.isEmpty()) {
             new_port = socket_threads.getLast().thr_port + 1;
         }
@@ -117,7 +116,6 @@ public class Server {
                 s.request_post_office(req, bf, pw);
                 bf.close();
                 pw.close();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
