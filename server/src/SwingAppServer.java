@@ -1,4 +1,3 @@
-/*
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,15 +9,14 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.imageio.*;
 import java.io.*;
 import javax.swing.ImageIcon;
-
-
-
+import javax.swing.text.JTextComponent;
 
 public class SwingAppServer extends JFrame implements ActionListener {
     JButton start_button;
     JButton call_shotgun;
     JButton tester;
-    JTextField strTextField;
+    //JTextField strTextField;
+    JLabel strTextField;
     public SwingAppServer () {
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -45,7 +43,7 @@ public class SwingAppServer extends JFrame implements ActionListener {
         frame.setLayout(null);
         frame.setUndecorated(true);
 
-        strTextField = new JTextField(10);
+        strTextField = new JLabel();
 
 
         start_button.addActionListener(this);
@@ -66,6 +64,9 @@ public class SwingAppServer extends JFrame implements ActionListener {
 
 
         start_button.setBounds(screenWidth - screenWidth/10, screenHeight - screenHeight/7, screenWidth/20, screenHeight/30);
+        frame.getContentPane().add(strTextField);
+        strTextField.setBounds(screenWidth/2, screenHeight/2, screenWidth, screenHeight/30);
+        strTextField.setFont(new Font("Arial", Font.BOLD,18));
 
         frame.setVisible(true);
 
@@ -78,6 +79,8 @@ public class SwingAppServer extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == start_button) {
+            //strTextField.setText("Hello World");
+            //strTextField
             System.out.println("Hello World");
         } else if (e.getSource() == call_shotgun) {
             try {
@@ -102,8 +105,7 @@ public class SwingAppServer extends JFrame implements ActionListener {
         }
     }
 }
- */
-
+/*
 import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
@@ -203,7 +205,7 @@ public class SwingAppServer extends JFrame implements ActionListener {
                 byte[] raw_message = message.getBytes(StandardCharsets.UTF_8);
                 os.write(raw_message, 0, raw_message.length);
 
-                connection.disconnect();*/
+                connection.disconnect();
 
 
 
@@ -213,6 +215,9 @@ public class SwingAppServer extends JFrame implements ActionListener {
             }
         } else if (e.getSource() == tester) {
             System.out.println("tester works");
-        }
+
     }
+
 }
+
+ */
