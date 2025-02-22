@@ -22,17 +22,17 @@ public class SocketListener extends SwingWorker<Void, String> {
 
     @Override
     protected Void doInBackground() throws Exception {
+        System.out.println("doing in background");
         String line;
-        while ((line = br.readLine()) != null) {
+        line = br.readLine();
             System.out.println("read line " + line);
             publish(line);
-
-        }
         return null;
     }
 
     @Override
     protected void process(List<String> chunks) {
+        System.out.println("printing to message");
         text.setText("");
         for (String message : chunks) {
             text.append(message);

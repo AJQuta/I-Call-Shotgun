@@ -59,6 +59,14 @@ public class SwingApp extends JFrame implements ActionListener {
 
 
         JFrame frame = new JFrame();
+        frame.getContentPane().setLayout(null);
+
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        ImageIcon imageIcon = new ImageIcon("./client/src/shotgun.png");
+        Image image = imageIcon.getImage();
+        imageIcon = new ImageIcon(image.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH));
+        frame.setContentPane(new JLabel(imageIcon));
+
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(screenWidth, screenHeight);
 
@@ -68,6 +76,11 @@ public class SwingApp extends JFrame implements ActionListener {
         textArea.setColumns(30); // Set width in columns
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+        textArea.setText("HELLO");
+        textArea.setBounds(screenWidth/10, screenHeight/10, screenWidth/2, screenHeight/2);
+
+
+
 
         try {
             SocketListener worker = new SocketListener(socket, textArea);
@@ -76,14 +89,7 @@ public class SwingApp extends JFrame implements ActionListener {
             e.printStackTrace();
         }
 
-
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        ImageIcon imageIcon = new ImageIcon("./client/src/shotgun.png");
-        Image image = imageIcon.getImage();
-        imageIcon = new ImageIcon(image.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH));
-        frame.setContentPane(new JLabel(imageIcon));
-
-        frame.setLayout(null);
+        //frame.setLayout(null);
         frame.setUndecorated(true);
 
 
