@@ -73,10 +73,10 @@ public class SwingApp extends JFrame implements ActionListener {
         } else if (e.getSource() == call_shotgun) {
             try {
 
-                String message = "Shotgun|MichaelL11";
+                String message = "SHOTGUN|MichaelL11";
 
                 Socket socket = new Socket("localhost", 4444);
-                PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println(message);
 
 

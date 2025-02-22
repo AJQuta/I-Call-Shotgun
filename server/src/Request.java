@@ -1,8 +1,11 @@
+import java.io.IOException;
+
 public class Request {
 
     public static enum REQ_TYPE {
         POST,
-        GET
+        GET,
+        SHOTGUN
     }
 
     public static enum SERV_RESPONSE {
@@ -27,8 +30,31 @@ public class Request {
         return data;
     }
 
-    public Request(String req_data) {
-        // TODO: take in data and create request
+    public Request(String req_data) throws IOException {
+        data = req_data;
+        String[] fields = data.split("\\|");
+        type = castToREQType(fields[0]);
+        if (type == null) {
+            throw new InvalidRequestException("Invalid type");
+        }
+        data = "";
+        for (int i = 1; i < fields.length; i++) {
+            data.concat(fields[i] + " ");
+        }
+        data.trim();
+    }
+
+    private REQ_TYPE castToREQType(String t) {
+        switch(t) {
+            case "POST":
+                return REQ_TYPE.POST;
+            case "GET":
+                return REQ_TYPE.GET;
+            case "SHOTGUN":
+                return REQ_TYPE.SHOTGUN;
+            default:
+                return null;
+        }
     }
     
 }
