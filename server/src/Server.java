@@ -60,7 +60,7 @@ public class Server {
     }
 
     private int create_request_handler(Request req) {
-        int new_port = 4000;
+        int new_port = 5000;
         if (!socket_threads.isEmpty()) {
             new_port = socket_threads.getLast().thr_port + 1;
         }
@@ -88,6 +88,12 @@ public class Server {
                     int port = s.create_request_handler(req);
                     System.out.println("This is new port: " + port);
                     pw.println("" + port);
+                }
+                SwingAppServer GUI = new SwingAppServer();
+                while (true) {
+                    String stats = "Server is connected to: ";
+                    stats.concat(req.getData());
+                    //GUI.updateStats(stats);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
