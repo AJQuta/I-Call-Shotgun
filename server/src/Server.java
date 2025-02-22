@@ -40,10 +40,9 @@ public class Server {
                 pw.println(data);
             } catch (IOException e) {
                 synchronized (lock) {
-                    System.out.println(Request.SERV_RESPONSE.IOERROR);
+                    System.out.println(this.getName() + " received signal " + Request.SERV_RESPONSE.IOERROR);
                     e.printStackTrace();
                 }
-                
             }
         }
 
@@ -75,11 +74,7 @@ public class Server {
             } //catch (InterruptedException e) {
 
             //}
-            
-        }
-
-        
-        
+        }      
     }
 
     private int port;
