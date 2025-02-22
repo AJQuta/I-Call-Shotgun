@@ -70,8 +70,8 @@ public class SwingAppServer extends JFrame implements ActionListener {
 
     }
 
-    public void updateStats() {
-        //strTextField.setText(Server.getInfo());
+    public void updateStats(String stats) {
+        strTextField.setText(stats);
     }
 
 

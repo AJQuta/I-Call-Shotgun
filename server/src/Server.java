@@ -62,6 +62,13 @@ public class Server {
                 BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream()));
                 req = new Request(bf.readLine());
                 System.out.println(req.getData());
+
+                SwingAppServer GUI = new SwingAppServer();
+                while (true) {
+                    String stats = "Server is connected to: ";
+                    stats.concat(req.getData());
+                    GUI.updateStats(stats);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
