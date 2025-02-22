@@ -46,6 +46,10 @@ public class Server {
             }
         }
 
+        public boolean forUser(String name) {
+            return this.request.getData().equals(name);
+        }
+
         public void run() {
             BufferedReader bf;
             PrintWriter pw = null;
