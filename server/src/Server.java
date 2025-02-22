@@ -89,12 +89,6 @@ public class Server {
                     System.out.println("This is new port: " + port);
                     pw.println("" + port);
                 }
-                SwingAppServer GUI = new SwingAppServer();
-                while (true) {
-                    String stats = "Server is connected to: ";
-                    stats.concat(req.getData());
-                    GUI.updateStats(stats);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
