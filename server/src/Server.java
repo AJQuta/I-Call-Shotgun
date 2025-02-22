@@ -39,21 +39,31 @@ public class Server {
         }
 
         public void run() {
+            BufferedReader bf;
+            PrintWriter pw = null;
             try {
                 thr_sock = thr_serv.accept();
-                BufferedReader bf = new BufferedReader(new InputStreamReader(thr_sock.getInputStream(), StandardCharsets.UTF_8));
-                PrintWriter pw = new PrintWriter(new OutputStreamWriter(thr_sock.getOutputStream(), StandardCharsets.UTF_8), true);
+                bf = new BufferedReader(new InputStreamReader(thr_sock.getInputStream(), StandardCharsets.UTF_8));
+                pw = new PrintWriter(new OutputStreamWriter(thr_sock.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println("Ehlo " + request.getData() + " from " + getName());
                 Request req;
                 while (true) {
                     req = new Request(bf.readLine());
                     synchronized (lock) {  
                         serv.request_post_office(req, bf, pw);
+                        pw.println(Request.SERV_RESPONSE.SUCCESS);
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-            }
+                if (!(pw == null ||  pw.checkError())) {
+                    pw.println(Request.SERV_RESPONSE.INVALID);
+                } else {
+                    System.out.println(Request.SERV_RESPONSE.IOERROR);
+                }
+                e.printStackTrace(); 
+            } //catch (InterruptedException e) {
+
+            //}
             
         }
 
@@ -112,6 +122,9 @@ public class Server {
                 break;
             case Request.REQ_TYPE.SHOTGUN:
                 for (Serv_Thread  thread : socket_threads) {
+                    // if (! thread.request.equals(req)) {
+                    //     thread.interrupt();
+                    // }
                     thread.handle_interrupt("SHOTGUN: " + req.getData(), bf, pw);
                 }
                 break;

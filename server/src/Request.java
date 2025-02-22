@@ -32,6 +32,9 @@ public class Request {
     }
 
     public Request(String req_data) throws IOException {
+        if (req_data == null) {
+            throw new InvalidRequestException("No data given.");
+        }
         String[] fields = req_data.split("\\|");
         type = castToREQType(fields[0]);
         if (type == null) {
