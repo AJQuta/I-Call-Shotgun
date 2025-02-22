@@ -33,6 +33,7 @@ public class Request {
     public Request(String req_data) throws IOException {
         data = req_data;
         String[] fields = data.split("|");
+        System.out.println(fields);
         type = castToREQType(Integer.parseInt(fields[0]));
         if (type == null) {
             throw new InvalidRequestException("Invalid type");

@@ -76,7 +76,7 @@ public class SwingApp extends JFrame implements ActionListener {
                 String message = "Shotgun|MichaelL11";
 
                 Socket socket = new Socket("localhost", 4444);
-                PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println(message);
 
 

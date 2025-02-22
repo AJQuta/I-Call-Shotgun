@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -56,11 +57,13 @@ public class Server {
         Server s = new Server();
 
         Request req;
+        String req_str;
         while (true) {
             try {
                 s.sock = s.servSock.accept();
-                BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream()));
-                req = new Request(bf.readLine());
+                BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream(), StandardCharsets.UTF_8));
+                req_str = bf.readLine();
+                req = new Request(req_str);
                 System.out.println(req.getData());
             } catch (IOException e) {
                 e.printStackTrace();
