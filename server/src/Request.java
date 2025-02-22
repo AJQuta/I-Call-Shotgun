@@ -37,11 +37,12 @@ public class Request {
         if (type == null) {
             throw new InvalidRequestException("Invalid type");
         }
-        data = "";
+        this.data = "";
+        
         for (int i = 1; i < fields.length; i++) {
-            data.concat(fields[i] + " ");
+            this.data += fields[i] + " ";
         }
-        data.trim();
+        this.data = this.data.trim();
     }
 
     private REQ_TYPE castToREQType(String t) {

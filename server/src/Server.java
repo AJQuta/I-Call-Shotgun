@@ -41,6 +41,7 @@ public class Server {
     
     public Server() {
         port = 4444;
+        socket_threads = new LinkedList<>();
         try {
             this.servSock = new ServerSocket(port);
         } catch (IOException e) {
@@ -81,8 +82,11 @@ public class Server {
                 BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream(), StandardCharsets.UTF_8));
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(s.sock.getOutputStream(), StandardCharsets.UTF_8), true);
                 req = new Request(bf.readLine());
+                System.out.println(req.getData());
                 if (req.getType() == Request.REQ_TYPE.BOOTSTRAP) {
+                    System.out.println("hello");
                     int port = s.create_request_handler(req);
+                    System.out.println("This is new port: " + port);
                     pw.println("" + port);
                 }
             } catch (IOException e) {
