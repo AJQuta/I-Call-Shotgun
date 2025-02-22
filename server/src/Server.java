@@ -34,8 +34,17 @@ public class Server {
             this.start();
         }
 
-        public void handle_interrupt(String data, BufferedReader bf, PrintWriter pw) {
-            pw.println(data);
+        public void handle_interrupt(String data) {
+            try {
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(thr_sock.getOutputStream(), StandardCharsets.UTF_8), true);
+                pw.println(data);
+            } catch (IOException e) {
+                synchronized (lock) {
+                    System.out.println(Request.SERV_RESPONSE.IOERROR);
+                    e.printStackTrace();
+                }
+                
+            }
         }
 
         public void run() {
@@ -55,12 +64,14 @@ public class Server {
                     }
                 }
             } catch (IOException e) {
-                if (!(pw == null ||  pw.checkError())) {
-                    pw.println(Request.SERV_RESPONSE.INVALID);
-                } else {
-                    System.out.println(Request.SERV_RESPONSE.IOERROR);
+                synchronized (lock) {
+                    if (!(pw == null ||  pw.checkError())) {
+                        pw.println(Request.SERV_RESPONSE.INVALID);
+                    } else {
+                        System.out.println(Request.SERV_RESPONSE.IOERROR);
+                    }
+                    e.printStackTrace(); 
                 }
-                e.printStackTrace(); 
             } //catch (InterruptedException e) {
 
             //}
@@ -125,7 +136,7 @@ public class Server {
                     // if (! thread.request.equals(req)) {
                     //     thread.interrupt();
                     // }
-                    thread.handle_interrupt("SHOTGUN: " + req.getData(), bf, pw);
+                    thread.handle_interrupt("SHOTGUN: " + req.getData());
                 }
                 break;
             default:
