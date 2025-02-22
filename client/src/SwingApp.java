@@ -19,6 +19,30 @@ public class SwingApp extends JFrame implements ActionListener {
     JButton tester;
     public SwingApp () {
 
+        Socket socket;
+        try {
+
+            String message = "BOOTSTRAP|MichaelL11";
+
+            Socket preSocket = new Socket("localhost", 3444);
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(preSocket.getOutputStream(), StandardCharsets.UTF_8), true);
+            pw.println(message);
+
+            BufferedReader bf = new BufferedReader(new InputStreamReader(preSocket.getInputStream(), StandardCharsets.UTF_8));
+            int newPort = Integer.parseInt(bf.readLine());
+            System.out.println("MyPort" + newPort);
+            bf.close();
+
+            socket = new Socket("localhost", newPort);
+            bf = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            System.out.println(bf.readLine());
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+
+
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         int screenWidth = screenSize.width;
@@ -71,41 +95,7 @@ public class SwingApp extends JFrame implements ActionListener {
         if (e.getSource() == exit_button) {
             System.exit(1);
         } else if (e.getSource() == call_shotgun) {
-            try {
 
-                String message = "BOOTSTRAP|MichaelL11";
-
-                Socket preSocket = new Socket("localhost", 3444);
-                PrintWriter pw = new PrintWriter(new OutputStreamWriter(preSocket.getOutputStream(), StandardCharsets.UTF_8), true);
-                pw.println(message);
-
-                BufferedReader bf = new BufferedReader(new InputStreamReader(preSocket.getInputStream(), StandardCharsets.UTF_8));
-                int newPort = Integer.parseInt(bf.readLine());
-                System.out.println("MyPort" + newPort);
-                bf.close();
-
-                Socket socket = new Socket("localhost", newPort);
-                bf = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-                System.out.println(bf.readLine());
-
-
-                /*URL server_port = new URL("https://localhost:4444/");
-                HttpsURLConnection connection =  (HttpsURLConnection) server_port.openConnection();
-                connection.setDoOutput(true);
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "text/plain");
-                OutputStream os = connection.getOutputStream();
-                byte[] raw_message = message.getBytes(StandardCharsets.UTF_8);
-                os.write(raw_message, 0, raw_message.length);
-
-                connection.disconnect();*/
-
-
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                System.exit(1);
-            }
         } else if (e.getSource() == tester) {
             System.out.println("tester works");
         }
