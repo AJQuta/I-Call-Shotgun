@@ -106,13 +106,11 @@ public class Server {
 
     public static void main(String[] args) {
         Server s = new Server();
-        SwingAppServer GUI = new SwingAppServer();
 
         Request req;
         while (true) {
             try {
                 s.sock = s.servSock.accept();
-                GUI.updateStats("Data");
                 BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream(), StandardCharsets.UTF_8));
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(s.sock.getOutputStream(), StandardCharsets.UTF_8), true);
                 req = new Request(bf.readLine());
