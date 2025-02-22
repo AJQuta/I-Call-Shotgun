@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,6 +12,8 @@ import java.io.OutputStreamWriter;
 import java.lang.Thread;
 
 public class Server {
+    private int userCount;
+    private ArrayList<String> userInfoArr;
 
     private class Serv_Thread extends Thread {
 
@@ -61,7 +65,7 @@ public class Server {
                 Request req;
                 while (true) {
                     req = new Request(bf.readLine());
-                    synchronized (lock) {  
+                    synchronized (lock) {
                         serv.request_post_office(req, bf, pw);
                         pw.println(Request.SERV_RESPONSE.SUCCESS);
                     }
@@ -73,12 +77,12 @@ public class Server {
                     } else {
                         System.out.println(Request.SERV_RESPONSE.IOERROR);
                     }
-                    e.printStackTrace(); 
+                    e.printStackTrace();
                 }
             } //catch (InterruptedException e) {
 
             //}
-        }      
+        }
     }
 
     private int port;
@@ -89,6 +93,7 @@ public class Server {
     public Server() {
         port = 3444;
         socket_threads = new LinkedList<>();
+        userInfoArr = new ArrayList<>();
         try {
             this.servSock = new ServerSocket(port);
         } catch (IOException e) {
@@ -96,6 +101,7 @@ public class Server {
             return;
         }
     }
+
     
 
     private boolean check_port_freedom(int port) {
@@ -124,7 +130,7 @@ public class Server {
         switch (req.getType()) {
             case Request.REQ_TYPE.BOOTSTRAP:
                 int port = create_request_handler(req);
-                pw.println("" + port); 
+                pw.println("" + port);
                 break;
             case Request.REQ_TYPE.POST:
                 break;
@@ -145,6 +151,8 @@ public class Server {
 
     public static void main(String[] args) {
         Server s = new Server();
+        SwingAppServer GUI = new SwingAppServer();
+        s.userCount = 0;
 
         Request req;
         BufferedReader bf;
@@ -159,14 +167,28 @@ public class Server {
                 pw.println(Request.SERV_RESPONSE.SUCCESS);
                 bf.close();
                 pw.close();
+                for (int i = 0; i < s.socket_threads.size(); i++) {
+                    if()
+                }
+                String connectionInfo = "User: " + req.getData() + ", Port: " + s.socket_threads;
+                s.userInfoArr.add(connectionInfo);
+                s.userCount++;
+                String users = "";
+                for (int i = 0; i < s.userCount; i++) {
+                    users = users.concat(s.userInfoArr.get(i));
+                }
+                GUI.updateStats(users);
+
+
+
             } catch (IOException e) {
                 if (!(pw == null ||  pw.checkError())) {
                     pw.println(Request.SERV_RESPONSE.INVALID);
                 } else {
                     System.out.println(Request.SERV_RESPONSE.IOERROR);
                 }
-                e.printStackTrace(); 
+                e.printStackTrace();
             }
         }
-    } 
+    }
 }
