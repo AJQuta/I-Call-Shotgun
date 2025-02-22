@@ -1,46 +1,59 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.OutputStreamWriter;
+import java.lang.Thread;
 
 public class Server {
 
-    private class Thread {
+    private class Serv_Thread extends Thread {
+
+        private final Object lock1 = new Object();
+
         private int thr_port;
+        private Request request;
         private ServerSocket thr_serv;
         private Socket thr_sock;
 
-        protected Thread(int p) {
+        public Serv_Thread(int p, Request req) {
             thr_port = p;
+            request = req;
             try {
                 thr_serv = new ServerSocket(thr_port);
-                // thr_sock = thr_serv.accept();
-
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-            
+            this.start();
         }
 
-        private void run() { //async
-
+        public void run() {
+            try {
+                thr_sock = thr_serv.accept();
+                BufferedReader bf = new BufferedReader(new InputStreamReader(thr_sock.getInputStream(), StandardCharsets.UTF_8));
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(thr_sock.getOutputStream(), StandardCharsets.UTF_8), true);
+                pw.println("Ehlo " + request.getData() + " from " + getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
         }
         
     }
 
     private int port;
-    private LinkedList<Thread> socket_threads;
+    private LinkedList<Serv_Thread> socket_threads;
     private Socket sock;
     private ServerSocket servSock;
     
     public Server() {
-        port = 4444;
+        port = 3444;
         socket_threads = new LinkedList<>();
         try {
             this.servSock = new ServerSocket(port);
@@ -49,6 +62,8 @@ public class Server {
             return;
         }
     }
+
+    
 
     private boolean check_port_freedom(int port) {
         try (ServerSocket test = new ServerSocket(port)) {
@@ -68,8 +83,25 @@ public class Server {
             new_port += 1;
         }
 
-        socket_threads.add(new Thread(new_port));
+        socket_threads.add(new Serv_Thread(new_port, req));
         return new_port;
+    }
+
+    private void request_post_office(Request req, BufferedReader bf, PrintWriter pw) throws IOException {
+        switch (req.getType()) {
+            case Request.REQ_TYPE.BOOTSTRAP:
+                int port = create_request_handler(req);
+                pw.println("" + port);
+                break;
+            case Request.REQ_TYPE.POST:
+                break;
+            case Request.REQ_TYPE.GET:
+                break;
+            case Request.REQ_TYPE.SHOTGUN:
+                break;
+            default:
+                throw new InvalidRequestException("Invalid request type");
+        }
     }
 
     public static void main(String[] args) {
@@ -84,20 +116,10 @@ public class Server {
                 BufferedReader bf = new BufferedReader(new InputStreamReader(s.sock.getInputStream(), StandardCharsets.UTF_8));
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(s.sock.getOutputStream(), StandardCharsets.UTF_8), true);
                 req = new Request(bf.readLine());
-                System.out.println(req.getData());
-                if (req.getType() == Request.REQ_TYPE.BOOTSTRAP) {
-                    System.out.println("hello");
-                    int port = s.create_request_handler(req);
-                    System.out.println("This is new port: " + port);
-                    pw.println("" + port);
-                }
+                s.request_post_office(req, bf, pw);
+                bf.close();
+                pw.close();
 
-                /*
-                while (true) {
-                    String stats = "Server is connected to: ";
-                    stats.concat(req.getData());
-                    //GUI.updateStats(stats);
-                }*/
             } catch (IOException e) {
                 e.printStackTrace();
             }
