@@ -19,7 +19,7 @@ public class Server {
             thr_port = p;
             try {
                 thr_serv = new ServerSocket(thr_port);
-                thr_sock = thr_serv.accept();
+                // thr_sock = thr_serv.accept();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -60,7 +60,7 @@ public class Server {
     }
 
     private int create_request_handler(Request req) {
-        int new_port = 5000;
+        int new_port = 4000;
         if (!socket_threads.isEmpty()) {
             new_port = socket_threads.getLast().thr_port + 1;
         }
