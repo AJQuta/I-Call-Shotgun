@@ -32,7 +32,9 @@ public class SwingApp extends JFrame implements ActionListener {
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(screenWidth, screenHeight);
 
-        ImageIcon imageIcon = new ImageIcon("./src/shotgun.png");
+
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        ImageIcon imageIcon = new ImageIcon("./client/src/shotgun.png");
         Image image = imageIcon.getImage();
         imageIcon = new ImageIcon(image.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH));
         frame.setContentPane(new JLabel(imageIcon));
