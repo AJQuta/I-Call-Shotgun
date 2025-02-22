@@ -32,6 +32,9 @@ public class Request {
     }
 
     public Request(String req_data) throws IOException {
+        if (req_data == null) {
+            throw new InvalidRequestException("No data given.");
+        }
         String[] fields = req_data.split("\\|");
         type = castToREQType(fields[0]);
         if (type == null) {
@@ -43,6 +46,14 @@ public class Request {
             this.data += fields[i] + " ";
         }
         this.data = this.data.trim();
+    }
+
+    public boolean equals(Object obj) {
+        if (! (obj instanceof Request)) {
+            return false;
+        }
+        Request req = (Request)obj;
+        return (this.data == req.data && this.data.equals(req.data));
     }
 
     private REQ_TYPE castToREQType(String t) {

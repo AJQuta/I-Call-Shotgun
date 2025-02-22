@@ -2,13 +2,10 @@ import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
-import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
 import javax.imageio.*;
 import java.io.*;
-import javax.swing.ImageIcon;
 import java.net.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,7 +23,9 @@ public class SwingApp extends JFrame implements ActionListener {
     public SwingApp () {
         try {
 
-            Thread async = new Thread(epicReader());
+
+
+
             username = JOptionPane.showInputDialog(null, "Enter your name:", "Input", JOptionPane.QUESTION_MESSAGE);
 
             String message = "BOOTSTRAP|" + username;
@@ -43,7 +42,7 @@ public class SwingApp extends JFrame implements ActionListener {
             socket = new Socket("localhost", newPort);
             bf = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             System.out.println(bf.readLine());
-            async.start();
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -63,9 +62,7 @@ public class SwingApp extends JFrame implements ActionListener {
 
 
         JFrame frame = new JFrame();
-        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setSize(screenWidth, screenHeight);
-
+        frame.getContentPane().setLayout(null);
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         ImageIcon imageIcon = new ImageIcon("./client/src/shotgun.png");
@@ -73,7 +70,29 @@ public class SwingApp extends JFrame implements ActionListener {
         imageIcon = new ImageIcon(image.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH));
         frame.setContentPane(new JLabel(imageIcon));
 
-        frame.setLayout(null);
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setSize(screenWidth, screenHeight);
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false); // So users can't type in it
+        textArea.setRows(10); // Set number of visible rows
+        textArea.setColumns(30); // Set width in columns
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setText("HELLO");
+        textArea.setBounds(screenWidth/10, screenHeight/10, screenWidth/2, screenHeight/2);
+
+
+
+
+        try {
+            SocketListener worker = new SocketListener(socket, textArea);
+            worker.execute(); // Start the worker
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //frame.setLayout(null);
         frame.setUndecorated(true);
 
 
@@ -100,6 +119,18 @@ public class SwingApp extends JFrame implements ActionListener {
 
     }
 
+    public String epicReader() {
+        BufferedReader shotgunReader;
+        try {
+            shotgunReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            futureMessage = shotgunReader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        System.out.println(futureMessage);
+        return futureMessage;
+    }
+
 
 
     public String epicReader() {
@@ -122,7 +153,6 @@ public class SwingApp extends JFrame implements ActionListener {
                 String message = "SHOTGUN|" + username;
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 pw.println(message);
-
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.exit(1);
