@@ -48,6 +48,14 @@ public class Request {
         this.data = this.data.trim();
     }
 
+    public boolean equals(Object obj) {
+        if (! (obj instanceof Request)) {
+            return false;
+        }
+        Request req = (Request)obj;
+        return (this.data == req.data && this.data.equals(req.data));
+    }
+
     private REQ_TYPE castToREQType(String t) {
         switch(t) {
             case "BOOTSTRAP":
