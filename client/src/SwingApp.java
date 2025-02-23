@@ -7,6 +7,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.imageio.*;
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.CompletableFuture;
 
 
 
@@ -18,7 +19,8 @@ public class SwingApp extends JFrame implements ActionListener {
     Socket socket;
     String username;
     String futureMessage;
-    public SwingApp() {
+    boolean shotgunCalled;
+    public SwingApp () {
         try {
 
 
@@ -46,6 +48,7 @@ public class SwingApp extends JFrame implements ActionListener {
             ex.printStackTrace();
             System.exit(1);
         }
+
 
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -113,6 +116,7 @@ public class SwingApp extends JFrame implements ActionListener {
 
         frame.setVisible(true);
 
+
     }
 
     public String epicReader() {
@@ -126,7 +130,6 @@ public class SwingApp extends JFrame implements ActionListener {
         System.out.println(futureMessage);
         return futureMessage;
     }
-
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exit_button) {
